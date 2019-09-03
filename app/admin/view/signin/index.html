@@ -1,0 +1,59 @@
+<section class="content">
+    <div class="panel panel-default panel-intro">
+        <div class="panel-header">
+            <div class="panel-lead">
+                {:build_heading()}
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <section class="content">
+                <div id="toolbar" class="toolbar">
+                    {:build_toolbar('refresh')}
+                </div>
+                <table id="table" class="table table-striped table-bordered table-hover"
+                       width="100%">
+                </table>
+            </section>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        // 初始化表格参数配置
+        Table.api.init({
+            extend: {
+                index_url: '{:url("index")}',
+                add_url: '{:url("add")}',
+                edit_url: '{:url("edit")}',
+                del_url: '{:url("del")}',
+                multi_url: '{:url("multi")}',
+                table: 'user',
+            }
+        });
+
+        var table = $("#table");
+
+        // 初始化表格
+        table.bootstrapTable({
+            url: $.fn.bootstrapTable.defaults.extend.index_url,
+            pk: 'id',
+            sortName: 'id',
+            columns: [
+                [
+                    {checkbox: true},
+                    {field: 'id', title: 'ID', sortable: true},
+                    {field: 'user_id', title: '会员ID', formatter: Table.api.formatter.search},
+                    {field: 'user.username', title: '会员名'},
+                    {field: 'successions', title: '连续签到次数', sortable: true},
+                    {field: 'createtime', title: '创建时间', formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                    {field: 'operate', title: '操作', table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                ]
+            ]
+        });
+
+        // 为表格绑定事件
+        Table.api.bindevent(table);
+    });
+</script>

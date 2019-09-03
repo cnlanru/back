@@ -1,0 +1,94 @@
+<section class="content">
+
+
+    <div class="panel panel-default panel-intro">
+        <div class="panel-header">
+            <div class="panel-lead">
+                {:build_heading()}
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <section class="content">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar()}
+                    </div>
+                    <table id="table" class="table table-striped table-bordered table-hover" width="100%">
+                    </table>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    $(function () {
+        // 初始化表格参数配置
+        Table.api.init({
+            extend: {
+                index_url: '{:url("index")}',
+                add_url: '{:url("add")}',
+                edit_url: '{:url("edit")}',
+                del_url: '{:url("del")}',
+                multi_url: '{:url("multi")}',
+                table: 'attachment'
+            }
+        });
+
+        var table = $("#table");
+        var formatter = {
+            thumb: function (value, row, index) {
+                if (row.mimetype.indexOf("image") > -1) {
+                    return '<a href="' + value + '" target="_blank"><img src="' + value + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                } else {
+                    return '<a href="' + row.url + '" target="_blank"><img src="https://tool.fastadmin.net/icon/' + row.imagetype + '.png" alt=""></a>';
+                }
+            },
+            url: function (value, row, index) {
+                return '<a href="' + row.url + '" target="_blank" class="label bg-green">' + value + '</a>';
+            },
+        };
+
+        // 初始化表格
+        table.bootstrapTable({
+            url: $.fn.bootstrapTable.defaults.extend.index_url,
+            sortName: 'id',
+            columns: [
+                [
+                    {field: 'state', checkbox: true,},
+                    {field: 'id', title: 'ID'},
+                    {field: 'admin_id', title: '管理员ID', visible: false, addClass: "selectpage", extend: "data-source='auth/admin/index' data-field='nickname'"},
+                    {field: 'user_id', title: '会员ID', visible: false, addClass: "selectpage", extend: "data-source='user/user/index' data-field='nickname'"},
+                    {field: 'url', title: '预览', formatter: formatter.thumb, operate: false},
+                    {field: 'url', title: '物理路径', formatter: formatter.url},
+                    {field: 'imagewidth', title: '宽度', sortable: true},
+                    {field: 'imageheight', title: '高度', sortable: true},
+                    {field: 'imagetype', title: '图片类型', formatter: Table.api.formatter.search},
+                    {field: 'storage', title: '存储引擎', formatter: Table.api.formatter.search},
+                    {field: 'filesize', title: '文件大小', operate: 'BETWEEN', sortable: true},
+                    {field: 'mimetype', title: 'Mime类型', formatter: Table.api.formatter.search},
+                    {
+                        field: 'createtime',
+                        title: '创建日期',
+                        formatter: Table.api.formatter.datetime,
+                        operate: 'RANGE',
+                        addclass: 'datetimerange',
+                        sortable: true
+                    },
+                    {
+                        field: 'operate',
+                        title: '操作',
+                        table: table,
+                        events: Table.api.events.operate,
+                        formatter: Table.api.formatter.operate
+                    }
+                ]
+            ],
+        });
+
+        // 为表格绑定事件
+        Table.api.bindevent(table);
+    });
+</script>

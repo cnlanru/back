@@ -1,0 +1,11 @@
+
+<script>
+    $(function () {
+        $(document).on('click', "input[name='row[ismenu]']", function () {
+            var name = $("input[name='row[name]']");
+            name.prop("placeholder", $(this).val() == 1 ? name.data("placeholder-menu") : name.data("placeholder-node"));
+        });
+        $("input[name='row[ismenu]']:checked").trigger("click");
+        Form.api.bindevent($("form[role=form]"));
+    });
+</script>

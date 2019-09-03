@@ -1,0 +1,331 @@
+/** lanru License By http://www.lanru.cn/ */
+@import  url("../../plugin/bootstrap-table/dist/bootstrap-table.min.css");
+@import  url("../../plugin/bootstrap/css/bootstrap.min.css");
+@import  url("../../plugin/font-awesome/css/font-awesome.min.css");
+@import  url("../../plugin/ionicons/css/ionicons.min.css");
+@import  url("../../plugin/nice-validator/jquery.validator.css");
+@import  url("../../plugin/bootstrap-select/css/bootstrap-select.min.css");
+@import  url("../../plugin/adminlte/css/adminlte.min.css");
+@import  url("../../plugin/adminlte/css/skins/_all-skins.min.css");
+@import  url("../../plugin/toastr/build/toastr.min.css");
+body {
+    height: 100%;
+}
+body {
+    background: #f1f4f6;
+    font-size: 13px;
+}
+body.is-dialog {
+    background: #fff;
+}
+em, i{
+    font-style: normal;
+}
+body{
+    font-size: 13px;
+}
+.clearfix:before,
+.clearfix:after,
+.content:before,
+.content:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after,
+.content:after {
+    clear: both;
+}
+.sidebar-form {
+    overflow: visible;
+}
+.sidebar-form .menuresult {
+    z-index: 999;
+    position: absolute;
+    top: 34px;
+    left: -1px;
+    width: 100%;
+    max-height: 250px;
+    overflow: auto;
+    margin: 0;
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.sidebar-form .menuresult a {
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    margin-bottom: -1px;
+    display: block;
+    padding: 10px 15px;
+    color: #222d32;
+}
+.sidebar-form .menuresult a:hover {
+    background: #eee;
+}
+.panel-default {
+    border-color: #ddd;
+}
+.panel-intro {
+    margin-bottom: 0;
+    border: none;
+}
+
+.panel-intro > .panel-header {
+    padding: 15px;
+    padding-bottom: 0;
+    background: #e8edf0;
+    border-color: #e8edf0;
+    position: relative;
+    overflow: hidden;
+}
+
+.panel-intro > .panel-header .panel-lead {
+    margin-bottom: 15px;
+}
+.panel-intro > .panel-header .panel-lead em {
+    display: block;
+    font-weight: bold;
+    font-style: normal;
+}
+.panel-intro > .panel-header .panel-title {
+    height: 25px;
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.panel-intro > .panel-header .panel-control {
+    height: 42px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+.panel-intro > .panel-header .panel-control .fa {
+    font-size: 14px;
+}
+.panel-intro > .panel-header .nav-tabs {
+    border-bottom: 0;
+    margin-bottom: 0;
+}
+.panel-intro > .panel-header .nav-tabs > li > a {
+    margin-right: 4px;
+    color: #95a5a6;
+    background-color: #d8e0e6;
+    border: 1px solid #e8edf0;
+    border-bottom-color: transparent;
+}
+.panel-intro > .panel-header .nav-tabs > li > a:hover,
+.panel-intro > .panel-header .nav-tabs > li > a:focus {
+    border: 1px solid #e8edf0;
+    color: #7b8a8b;
+    background-color: #c9d4dc;
+}
+.panel-intro > .panel-header .nav-tabs > li.active > a,
+.panel-intro > .panel-header .nav-tabs > li.active > a:hover,
+.panel-intro > .panel-header .nav-tabs > li.active > a:focus {
+    color: #7b8a8b;
+    background-color: #ffffff;
+    border-bottom-color: transparent;
+    cursor: default;
+}
+/*单表格*/
+.panel-tabs .panel-header {
+    padding: 12px 15px 12px 15px;
+}
+.panel-tabs .panel-header .panel-lead {
+    margin-bottom: 0px;
+}
+/*选项卡*/
+.panel-nav .panel-header {
+    padding: 0px;
+    padding-bottom: 0;
+    background: #f1f4f6;
+    border-color: #f1f4f6;
+}
+
+.fieldlist dd {
+    display: block;
+    margin: 5px 0;
+}
+.fieldlist dd input {
+    display: inline-block;
+    width: 300px;
+}
+.fieldlist dd input:first-child {
+    width: 110px;
+}
+.fieldlist dd ins {
+    width: 110px;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: bold;
+}
+.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 34px;
+}
+.fixed-table-toolbar .columns-right { margin-top: 10px; }
+.fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.fixed-table-pagination div.pagination .pagination {
+    margin: 0;
+}
+
+#chooseicon {
+    margin:10px;
+}
+#chooseicon ul {
+    margin:5px 0 0 0;
+}
+#chooseicon ul li{
+    width:41px;height:42px;
+    line-height:42px;
+    border:1px solid #efefef;
+    padding:1px;
+    margin:1px;
+    text-align: center;
+    font-size:18px;
+}
+#chooseicon ul li:hover{
+    border:1px solid #2c3e50;
+    cursor:pointer;
+}
+.panel-body{
+    padding: 0;
+}
+#treeview .jstree-container-ul .jstree-node {
+    display:block;
+    clear:both;
+}
+#treeview .jstree-leaf:not(:first-child) {
+    float:left;
+    background:none;
+    margin-left:0;
+    min-width:80px;
+    clear:none;
+}
+#treeview .jstree-leaf {
+    float:left;
+    margin-left:0;
+    padding-left:24px;
+    min-width:80px;
+    clear:none;
+    color:#777;
+}
+#treeview .jstree-leaf > .jstree-icon,
+#treeview .jstree-leaf .jstree-themeicon {
+    display:none;
+}
+#treeview .jstree-last {
+    background-position:-292px -4px;
+    background-repeat:repeat-y;
+}
+#treeview .jstree-children:before,
+#treeview .jstree-children:after {
+    content:" ";
+    display:table;
+}
+#treeview .jstree-children:after {
+    clear:both;
+}
+#treeview .jstree-themeicon {
+    display:none;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading .loading-wrap .loading-text {
+    font-size: 13px;
+}
+
+body.is-dialog .content-wrapper, body.is-dialog .main-footer {margin-left: 0;}
+.bs3 .n-right{float: right;}
+.bootstrap-table td.bs-checkbox {
+    vertical-align: middle;
+}
+.sidebar-menu .treeview-menu > li > a {
+    padding: 12px 5px 12px 15px;
+}
+
+.input-group-addon, .input-group-btn {
+    white-space: nowrap;
+}
+.input-group-addon {
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555555;
+    text-align: center;
+}
+/*去除bootstrap-table的边框*/
+.fixed-table-container {
+    border: none !important;
+}
+/*修复nice-validator新版下的一处BUG*/
+.nice-validator input,
+.nice-validator select,
+.nice-validator textarea,
+.nice-validator [contenteditable] {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+/*修复nice-validator和summernote的编辑框冲突*/
+.nice-validator .note-editor .note-editing-area .note-editable {
+    display: inherit;
+}
+/*预览区域*/
+.plupload-preview {
+    padding: 0 10px;
+    margin-bottom: 0;
+}
+.plupload-preview li {
+    margin-top: 15px;
+}
+.plupload-preview .thumbnail {
+    margin-bottom: 10px;
+}
+.plupload-preview a {
+    display: block;
+}
+.plupload-preview a:first-child {
+    height: 90px;
+}
+.plupload-preview a img {
+    height: 80px;
+    object-fit: cover;
+}
+/*修复radio和checkbox样式对齐*/
+.radio > label,
+.checkbox > label {
+    margin-right: 10px;
+}
+.radio > label > input,
+.checkbox > label > input {
+    margin: 2px 0 0;
+}
+.wipecache li a {
+    color: #444444 !important;
+}
+/*修正开关关闭下的颜色值*/
+.btn-switcher.disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+.btn-switcher .text-gray {
+    color: #d2d6de !important;
+}
+
+/* Input group */
+.input-group .input-group-addon {
+    border-radius: 0;
+    border-color: #d2d6de;
+    background-color: #fff;
+}
+/* button groups */
+.btn-group-vertical .btn.btn-flat:first-of-type,
+.btn-group-vertical .btn.btn-flat:last-of-type {
+    border-radius: 0;
+}

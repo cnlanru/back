@@ -1,0 +1,57 @@
+<section class="content">
+    <div class="panel panel-default panel-intro">
+        <div class="panel-header">
+            <div class="panel-lead">
+                {:build_heading()}
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <section class="content">
+                <div id="toolbar" class="toolbar">
+                    {:build_toolbar('refresh,add,delete')}
+                </div>
+                <table id="table" class="table table-striped table-bordered table-hover"
+                       data-operate-edit="{:$auth->check('ad/adsort/edit')}"
+                       data-operate-del="{:$auth->check('ad/adsort/del')}"
+                       width="100%">
+                </table>
+            </section>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        // 初始化表格参数配置
+        Table.api.init({
+            extend: {
+                index_url: '{:url("index")}',
+                add_url: '{:url("add")}',
+                edit_url: '{:url("edit")}',
+                del_url: '{:url("del")}',
+                multi_url: '{:url("multi")}',
+            }
+        });
+
+        var table = $("#table");
+
+        // 初始化表格
+        table.bootstrapTable({
+            url: $.fn.bootstrapTable.defaults.extend.index_url,
+            columns: [
+                [
+                    {field: 'state', checkbox: true, },
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: '标题'},
+                    {field: 'createtime', title: '创建时间', formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                    {field: 'operate', title: '操作', table: table, events: Table.api.events.operate, formatter: function (value, row, index) {
+                            return Table.api.formatter.operate.call(this, value, row, index);
+                        }}
+                ]
+            ]
+        });
+
+        // 为表格绑定事件
+        Table.api.bindevent(table);
+    });
+</script>

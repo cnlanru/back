@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="renderer" content="webkit">
+    <title>{$title|default='后台管理系统'}</title>
+    <link rel="stylesheet" href="/assets/admin/css/main.css">
+    <!--[if lt IE 9]>
+    <script src="/assets/plugin/compatible/html5shiv.min.js"></script>
+    <script src="/assets/plugin/compatible/respond.min.js"></script>
+    <![endif]-->
+    <script>
+        var Config = {
+            upload: {
+                maxsize: '{:ini_get("upload_max_filesize")}',
+                mimetype: '{$site.filemimetype}',
+                multipart: '1',
+                multiple: false,
+                uploadurl: '{:url("ajax/upload")}'
+            }
+        };
+    </script>
+    <script src="/assets/plugin/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/plugin/jquery/jquery.drag.min.js"></script>
+    <script src="/assets/plugin/jquery/jquery.drop.min.js"></script>
+    <script src="/assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/plugin/fastclick/lib/fastclick.js"></script>
+    <script src="/assets/plugin/moment/moment.js"></script>
+    <script src="/assets/plugin/adminlte/js/adminlte.min.js"></script>
+    <script src="/assets/plugin/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/assets/plugin/plupload/js/moxie.min.js"></script>
+    <script src="/assets/plugin/plupload/js/plupload.min.js"></script>
+    <script src="/assets/plugin/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="/assets/plugin/laydate/laydate.js"></script>
+    <script src="/assets/plugin/nice-validator/jquery.validator.min.js?local=zh-CN"></script>
+    <script src="/assets/plugin/art-template/dist/template.js"></script>
+    <script src="/assets/plugin/layer/layer.js"></script>
+    <script src="/assets/plugin/lanru/jquery.dragsort.js"></script>
+    <script src="/assets/plugin/toastr/build/toastr.min.js"></script>
+    <script src="/assets/plugin/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="/assets/plugin/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/assets/plugin/lanru/bootstrap-table-commonsearch.js"></script>
+    <script src="/assets/admin/js/controller.js"></script>
+    <script src="/assets/admin/js/lanru.js"></script>
+    <script src="/assets/admin/js/upload.js"></script>
+    <script src="/assets/admin/js/form.js"></script>
+    <script src="/assets/admin/js/table.js"></script>
+    <script src="/assets/admin/js/config.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini {:defined('IS_DIALOG') && IS_DIALOG ? 'is-dialog' : 'fixed'}">
+<div class="wrapper">
+    {if !IS_DIALOG}
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="{:url('admin')}" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <!--span class="logo-mini"><b>L</b>an</span-->
+            <!-- logo for regular state and mobile devices -->
+            <!--span class="logo-lg"><b>LanRu</b>Admin</span-->
+            后台管理
+        </a>
+
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">切换导航</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/">
+                            <i class="fa fa-home" style="font-size:14px;"></i>
+                        </a>
+                    </li>
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown">
+                        <a href="javascript:;" data-toggle="dropdown" title="清空缓存">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        <ul class="dropdown-menu wipecache">
+                            <li><a href="javascript:;" data-type="all"><i class="fa fa-trash"></i> 一键清除缓存</a></li>
+                            <li class="divider"></li>
+                            <li><a href="javascript:;" data-type="content"><i class="fa fa-file-text"></i> 清空内容缓存</a></li>
+                            <li><a href="javascript:;" data-type="template"><i class="fa fa-file-image-o"></i> 清除模板缓存</a></li>
+                            <li><a href="javascript:;" data-type="addons"><i class="fa fa-rocket"></i> 清除插件缓存</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i>
+                            <span class="hidden-xs">{$admin.username}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{:url('general/profile')}"><i class="fa fa-cog"></i>个人配置</a></li>
+                            <li><a href="{:url('index/logout')}"><i class="fa fa-sign-out"></i>退出</a></li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="搜索菜单">
+                    <span class="input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                          <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                    <div class="menuresult list-group sidebar-form hide">
+                    </div>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu" data-widget="tree">
+                {$menulist|raw}
+
+                <li class="header">相关链接</li>
+                <!--li><a href="http://www.lanru.cn" target="_blank"><i class="fa fa-circle-o text-red"></i> <span>官方链接</span></a></li-->
+                <li><a href="https://www.hongdajiaoyu.net/" target="_blank"><i class="fa fa-circle-o text-red"></i> <span>官方链接</span></a></li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    {/if}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        {if !IS_DIALOG}
+        <section class="content-header hidden-xs">
+            <em><a href="/admin" class="addtabsit"><i class="fa fa-dashboard"></i> 控制台</a></em>
+            <ol class="breadcrumb">
+                {foreach $breadcrumb as $vo}
+                <li><a href="javascript:;" data-url="{$vo.url}">{$vo.title}</a></li>
+                {/foreach}
+            </ol>
+        </section>
+        {/if}
+
+        {__CONTENT__}
+    </div>
+    <!-- /.content-wrapper -->
+
+    {if !IS_DIALOG}
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 2.0.0
+        </div>
+        <strong>Copyright &copy; 2017-{:date('Y')} All rights reserved.
+    </footer>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading">官方通告</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">新的插件xxx</h4>
+                                <p>xxxx</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+            </div>
+            <!-- /.tab-pane -->
+
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+    {/if}
+</div>
+<!-- ./wrapper -->
+
+<script>
+    $(function () {
+        //清除缓存
+        $(document).on('click', "ul.wipecache li a", function () {
+            $.ajax({
+                url: '{:url("ajax/wipecache")}',
+                dataType: 'json',
+                data: {type: $(this).data("type")},
+                cache: false,
+                success: function (ret) {
+                    if (ret.hasOwnProperty("code")) {
+                        var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                        if (ret.code === 1) {
+                            toastr.success(msg ? msg : '清理缓存已完成');
+                        } else {
+                            toastr.error(msg ? msg : '清理缓存失败');
+                        }
+                    } else {
+                        toastr.error('未知数据格式');
+                    }
+                }, error: function () {
+                    toastr.error('网络错误');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

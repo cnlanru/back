@@ -1,0 +1,158 @@
+<section class="content">
+    <div class="panel panel-default panel-intro">
+        <div class="panel-body">
+            <section class="content">
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <input type="hidden" name="row[id]" value="{$row.id}" />
+    <div class="form-group">
+        <label for="c-group_id" class="control-label col-xs-12 col-sm-2">角色组:</label>
+        <div class="col-xs-12 col-sm-4">
+            {$groupList|raw}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-username" class="control-label col-xs-12 col-sm-2">用户名:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-username" data-rule="required" class="form-control" name="row[username]" type="text" value="{$row.username|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-nickname" class="control-label col-xs-12 col-sm-2">昵称:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-nickname" data-rule="required" class="form-control" name="row[nickname]" type="text" value="{$row.nickname|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-password" class="control-label col-xs-12 col-sm-2">密码:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-password" data-rule="password" class="form-control" name="row[password]" type="text" value="" placeholder="不修改密码请留空" autocomplete="new-password" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-email" class="control-label col-xs-12 col-sm-2">电子邮箱:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-email" data-rule="" class="form-control" name="row[email]" type="text" value="{$row.email|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-mobile" class="control-label col-xs-12 col-sm-2">手机号:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-mobile" data-rule="" class="form-control" name="row[mobile]" type="text" value="{$row.mobile|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-avatar" class="control-label col-xs-12 col-sm-2">头像:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-avatar" data-rule="" class="form-control" size="50" name="row[avatar]" type="text" value="{$row.avatar}">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-avatar" class="btn btn-danger plupload" data-input-id="c-avatar" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="false" data-preview-id="p-avatar"><i class="fa fa-upload"></i> 上传</button></span>
+                    <span><button type="button" id="fachoose-avatar" class="btn btn-primary fachoose" data-input-id="c-avatar" data-mimetype="image/*" data-multiple="false" data-url="{:url('general.attachment/select')}"><i class="fa fa-list"></i> 选择</button></span>
+                </div>
+                <span class="msg-box n-right" for="c-avatar"></span>
+            </div>
+            <ul class="row list-inline plupload-preview" id="p-avatar"></ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-level" class="control-label col-xs-12 col-sm-2">等级:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-level" data-rule="required" class="form-control" name="row[level]" type="number" value="{$row.level}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-gender" class="control-label col-xs-12 col-sm-2">性别:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[gender]', ['1'=>'男', '0'=>'女'], $row['gender'])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-birthday" class="control-label col-xs-12 col-sm-2">生日:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-birthday" data-rule="" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[birthday]" type="text" value="{$row.birthday}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-money" class="control-label col-xs-12 col-sm-2">余额:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-money" data-rule="required" class="form-control" name="row[money]" type="number" value="{$row.money}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-score" class="control-label col-xs-12 col-sm-2">积分:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-score" data-rule="required" class="form-control" name="row[score]" type="number" value="{$row.score}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-successions" class="control-label col-xs-12 col-sm-2">连续登录天数:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-successions" data-rule="required" class="form-control" name="row[successions]" type="number" value="{$row.successions}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-maxsuccessions" class="control-label col-xs-12 col-sm-2">最大连续登录天数:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-maxsuccessions" data-rule="required" class="form-control" name="row[maxsuccessions]" type="number" value="{$row.maxsuccessions}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-prevtime" class="control-label col-xs-12 col-sm-2">上次登录时间:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-prevtime" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[prevtime]" type="text" value="{$row.prevtime|datetime}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-logintime" class="control-label col-xs-12 col-sm-2">登录时间:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-logintime" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[logintime]" type="text" value="{$row.logintime|datetime}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-loginip" class="control-label col-xs-12 col-sm-2">登录IP:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-loginip" data-rule="required" class="form-control" name="row[loginip]" type="text" value="{$row.loginip}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-loginfailure" class="control-label col-xs-12 col-sm-2">失败次数:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-loginfailure" data-rule="required" class="form-control" name="row[loginfailure]" type="number" value="{$row.loginfailure}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-joinip" class="control-label col-xs-12 col-sm-2">加入IP:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-joinip" data-rule="required" class="form-control" name="row[joinip]" type="text" value="{$row.joinip}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-jointime" class="control-label col-xs-12 col-sm-2">加入时间:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-jointime" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[jointime]" type="text" value="{$row.jointime|datetime}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content" class="control-label col-xs-12 col-sm-2">状态:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['1'=>'正常', '0'=>'隐藏'], $row['status'])}
+        </div>
+    </div>
+    <div class="form-group layer-footer hidden">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8 text-left">
+            <button type="submit" class="btn btn-success btn-embossed disabled">提交</button>
+            <button type="reset" class="btn btn-default btn-embossed">重置</button>
+        </div>
+    </div>
+</form>
+
+            </section>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        Form.api.bindevent($("form[role=form]"));
+    })
+</script>

@@ -1,0 +1,101 @@
+<section class="content">
+
+
+    <div class="panel panel-default panel-intro">
+        <div class="panel-header">
+            <div class="panel-lead">
+                {:build_heading()}
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <section class="content">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                        {if request()->get('multiple') == 'true'}
+                        <a class="btn btn-danger btn-choose-multi"><i class="fa fa-check"></i> 选择</a>
+                        {/if}
+                    </div>
+                    <table id="table" class="table table-striped table-bordered table-hover" width="100%">
+                    </table>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    $(function () {
+        // 初始化表格参数配置
+        Table.api.init({
+            extend: {
+                index_url: '{:url("select")}',
+            }
+        });
+
+        var table = $("#table");
+        var formatter = {
+            thumb: function (value, row, index) {
+                if (row.mimetype.indexOf("image") > -1) {
+                    return '<a href="' + value + '" target="_blank"><img src="' + value + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                } else {
+                    return '<a href="' + row.url + '" target="_blank"><img src="https://tool.fastadmin.net/icon/' + row.imagetype + '.png" alt=""></a>';
+                }
+            },
+            url: function (value, row, index) {
+                return '<a href="' + row.url + '" target="_blank" class="label bg-green">' + value + '</a>';
+            },
+        };
+
+        // 初始化表格
+        table.bootstrapTable({
+            url: $.fn.bootstrapTable.defaults.extend.index_url,
+            sortName: 'id',
+            columns: [
+                [
+                    {field: 'state', checkbox: true,},
+                    {field: 'id', title: 'ID'},
+                    {field: 'admin_id', title: "管理员ID", visible: false},
+                    {field: 'user_id', title: "会员ID", visible: false},
+                    {field: 'url', title: "预览", formatter: formatter.thumb, operate: false},
+                    {field: 'imagewidth', title: "宽度", operate: false},
+                    {field: 'imageheight', title: "高度", operate: false},
+                    {
+                        field: 'mimetype', title: "图片类型", operate: 'LIKE %...%',
+                        process: function (value, arg) {
+                            return value.replace(/\*/g, '%');
+                        }
+                    },
+                    {field: 'createtime', title: "创建日期", formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                    {
+                        field: 'operate', title: "操作", events: {
+                            'click .btn-chooseone': function (e, value, row, index) {
+                                var multiple = Lanru.api.query('multiple');
+                                multiple = multiple == 'true' ? true : false;
+                                Lanru.api.close({ url: row.url, multiple: multiple });
+                            },
+                        }, formatter: function () {
+                            return '<a href="javascript:;" class="btn btn-danger btn-chooseone btn-xs"><i class="fa fa-check"></i> 选择</a>';
+                        }
+                    }
+                ]
+            ]
+        });
+
+        // 选中多个
+        $(document).on("click", ".btn-choose-multi", function () {
+            var urlArr = new Array();
+            $.each(table.bootstrapTable("getAllSelections"), function (i, j) {
+                urlArr.push(j.url);
+            });
+            var multiple = Lanru.api.query('multiple');
+            multiple = multiple == 'true' ? true : false;
+            Lanru.api.close({ url: urlArr.join(","), multiple: multiple });
+        });
+
+        // 为表格绑定事件
+        Table.api.bindevent(table);
+    });
+</script>

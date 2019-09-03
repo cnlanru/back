@@ -1,0 +1,296 @@
+<script>
+    $(function () {
+        // 初始化表格参数配置
+        Table.api.init({
+            extend: {
+                index_url: '{:url("index")}',
+                add_url: '',
+                edit_url: '',
+                del_url: '',
+                multi_url: ''
+            }
+        });
+
+        var table = $("#table");
+
+        table.on('load-success.bs.table', function (e, json) {
+
+            // 点击卸载
+            $(document).on("click", ".btn-uninstall", function () {
+                var name = $(this).closest(".operate").data('name');
+                var state = $(this).closest(".operate").data('state');
+                var title = $(this).closest(".operate").data('title');
+
+                if (state == 1) {
+                    layer.alert('请先禁用插件', {icon: 7});
+                    return false;
+                }
+                layer.confirm(title + '卸载提示', function () {
+                    uninstall(name, false);
+                });
+            });
+
+            // 点击配置
+            $(document).on("click", ".btn-config", function () {
+                var name = $(this).closest(".operate").data("name");
+                Lanru.api.open("addon/config?name=" + name, '设置');
+            });
+
+            // 点击启用/禁用
+            $(document).on("click", ".btn-enable,.btn-disable", function () {
+                var name = $(this).data("name");
+                var action = $(this).data("action");
+                operate(name, action, false);
+            });
+
+        });
+
+        table.on('load-error.bs.table', function (e, status, res) {
+            if (status == 404 && $(".btn-switch.active").data("type") != "local") {
+                layer.confirm('立即存储可用提示', {
+                    title: '热处理',
+                    btn: ['切换到本地', '尝试重试']
+                }, function (index) {
+                    layer.close(index);
+                    $(".btn-switch[data-type='local']").trigger("click");
+                }, function (index) {
+                    layer.close(index);
+                    table.bootstrapTable('refresh');
+                });
+                return false;
+            }
+        });
+
+        table.on('post-body.bs.table', function (e, settings, json, xhr) {
+            var parenttable = table.closest('.bootstrap-table');
+            var d = $(".fixed-table-toolbar", parenttable).find(".search input");
+            d.off("keyup drop blur");
+            d.on("keyup", function (e) {
+                if (e.keyCode == 13) {
+                    var that = this;
+                    var options = table.bootstrapTable('getOptions');
+                    var queryParams = options.queryParams;
+                    options.pageNumber = 1;
+                    options.queryParams = function (params) {
+                        var params = queryParams(params);
+                        params.search = $(that).val();
+                        return params;
+                    };
+                    table.bootstrapTable('refresh', {});
+                }
+            });
+        });
+        template.helper("Moment", moment);
+        template.helper("addons", Config['addons']);
+        var formatter = {
+            title: function (value, row, index) {
+                var title = '<a class="title" href="' + row.url + '" data-toggle="tooltip" title="查看加载项主页" target="_blank">' + value + '</a>';
+                if (row.screenshots && row.screenshots.length > 0) {
+                    title += ' <a href="javascript:;" data-index="' + index + '" class="view-screenshots text-success" title="查看加载项屏幕截图" data-toggle="tooltip"><i class="fa fa-image"></i></a>';
+                }
+                return title;
+            },
+            operate: function (value, row, index) {
+                return template("operatetpl", {item: row, index: index});
+            },
+            toggle: function (value, row, index) {
+                return '<a href="javascript:;" data-toggle="tooltip" title="单击以切换状态" class="btn btn-toggle btn-' + (row.state == 1 ? "disable" : "enable") + '" data-action="' + (row.state == 1 ? "disable" : "enable") + '" data-name="' + row.name + '"><i class="fa ' + (row.state == 0 ? 'fa-toggle-on fa-rotate-180 text-gray' : 'fa-toggle-on text-success') + ' fa-2x"></i></a>';
+            },
+            author: function (value, row, index) {
+                return '<a href="https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes" target="_blank" data-toggle="tooltip" title="单击此处可联系开发人员" class="text-primary">' + value + '</a>';
+            },
+            price: function (value, row, index) {
+                if (isNaN(value)) {
+                    return value;
+                }
+                return parseFloat(value) == 0 ? '<span class="text-success">免费</span>' : '<span class="text-danger">￥' + value + '</span>';
+            },
+            downloads: function (value, row, index) {
+                return value;
+            },
+            version: function (value, row, index) {
+                return row.addon && row.addon.version != row.version ? '<a href="' + row.url + '?version=' + row.version + '" target="_blank"><span class="releasetips text-primary" data-toggle="tooltip" title="' + row.version + '新版本提示">' + row.addon.version + '<i></i></span></a>' : row.version;
+            },
+            home: function (value, row, index) {
+                return row.addon ? '<a href="' + row.addon.url + '" data-toggle="tooltip" title="查看加载项索引页" target="_blank"><i class="fa fa-home text-primary"></i></a>' : '<a href="javascript:;"><i class="fa fa-home text-gray"></i></a>';
+            },
+        }
+
+
+        // 初始化表格
+        table.bootstrapTable({
+            url: $.fn.bootstrapTable.defaults.extend.index_url,
+            columns: [
+                [
+                    {field: 'id', title: 'ID', operate: false, visible: false},
+                    {
+                        field: 'home',
+                        title: '前台',
+                        width: '50px',
+                        formatter: formatter.home
+                    },
+                    {field: 'name', title: '插件名称', operate: false, visible: false, width: '120px'},
+                    {
+                        field: 'title',
+                        title: '插件名称',
+                        operate: 'LIKE',
+                        align: 'left',
+                        formatter: formatter.title
+                    },
+                    {field: 'intro', title: '介绍', operate: 'LIKE', align: 'left', class: 'visible-lg'},
+                    {
+                        field: 'author',
+                        title: '作者',
+                        operate: 'LIKE',
+                        width: '100px',
+                        formatter: formatter.author
+                    },
+                    {
+                        field: 'version',
+                        title: '版本',
+                        operate: 'LIKE',
+                        width: '80px',
+                        align: 'center',
+                        formatter: formatter.version
+                    },
+                    {
+                        field: 'toggle',
+                        title: '状态',
+                        width: '80px',
+                        formatter: formatter.toggle
+                    },
+                    {
+                        field: 'id',
+                        title: '操作',
+                        align: 'center',
+                        table: table,
+                        formatter: formatter.operate,
+                        align: 'right'
+                    },
+                ]
+            ],
+            pagination: false,
+            search: false,
+            commonSearch: false,
+            templateView: false,
+            clickToSelect: false,
+            showColumns: false,
+        });
+
+        // 为表格绑定事件
+        Table.api.bindevent(table);
+        // 离线安装
+        Upload.api.plupload("#plupload-addon", function (data, ret) {
+            toastr.success(ret.msg);
+            operate(data.addon.name, 'enable', false);
+        });
+
+        var operate = function (name, action, force) {
+            Lanru.api.ajax({
+                url: '{:url("state")}',
+                data: {name: name, action: action, force: force ? 1 : 0}
+            }, function (data, ret) {
+                layer.closeAll();
+                location.reload();
+            }, function (data, ret) {
+                if (ret && ret.code === -3) {
+                    //插件目录发现影响全局的文件
+                    layer.open({
+                        content: template("conflicttpl", ret.data),
+                        shade: 0.8,
+                        area: ['800px', '600px'],
+                        title: '警告',
+                        btn: ['继续操作', '取消'],
+                        end: function () {
+
+                        },
+                        yes: function () {
+                            operate(name, action, true);
+                        }
+                    });
+
+                } else {
+                    layer.alert(ret.msg);
+                }
+                return false;
+            });
+        };
+
+
+        var install = function (name, version, force) {
+            Lanru.api.ajax({
+                url: '{:url("install")}',
+                data: {
+                    name: name,
+                    force: force ? 1 : 0,
+                    version: version,
+                    faversion: version
+                }
+            }, function (data, ret) {
+                layer.closeAll();
+                layer.alert('在线安装提示', {
+                    btn: ['确定'],
+                    title: '警告',
+                    icon: 1
+                });
+                $('.btn-refresh').trigger('click');
+            }, function (data, ret) {
+                if (ret && ret.code === -3) {
+                    //插件目录发现影响全局的文件
+                    layer.open({
+                        content: template("conflicttpl", ret.data),
+                        shade: 0.8,
+                        area: ['800px', '600px'],
+                        title: '警告',
+                        btn: ['继续安装', '取消'],
+                        end: function () {
+
+                        },
+                        yes: function () {
+                            install(name, version, true);
+                        }
+                    });
+
+                } else {
+                    layer.alert(ret.msg);
+                }
+                return false;
+            });
+        };
+
+
+        var uninstall = function (name, force) {
+            Lanru.api.ajax({
+                url: '{:url("uninstall")}',
+                data: {name: name, force: force ? 1 : 0}
+            }, function (data, ret) {
+                layer.closeAll();
+                location.reload();
+            }, function (data, ret) {
+                if (ret && ret.code === -3) {
+                    //插件目录发现影响全局的文件
+                    layer.open({
+                        content: template("conflicttpl", ret.data),
+                        shade: 0.8,
+                        area: ['800px', '600px'],
+                        title: '警告',
+                        btn: ['继续卸载', '取消'],
+                        end: function () {
+
+                        },
+                        yes: function () {
+                            uninstall(name, true);
+                        }
+                    });
+
+                } else {
+                    layer.alert(ret.msg);
+                }
+                return false;
+            });
+        };
+
+
+
+    });
+</script>

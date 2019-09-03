@@ -1,0 +1,72 @@
+<section class="content">
+    <div class="panel panel-default panel-intro">
+        <div class="panel-header">
+            <div class="panel-lead">
+                {:build_heading()}
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <section class="content">
+                <div id="toolbar" class="toolbar">
+                    <a href="javascript:;" class="btn btn-primary btn-sm btn-refresh" title="刷新" ><i class="fa fa-refresh"></i> </a> <a href="javascript:;" class="btn btn-success btn-edit btn-disabled disabled btn-sm" title="编辑" ><i class="fa fa-pencil"></i> 编辑</a> <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled btn-sm" title="删除" ><i class="fa fa-trash"></i> 删除</a>                        <div class="dropdown btn-group ">
+                    <a class="btn btn-primary btn-more dropdown-toggle btn-sm btn-disabled disabled" data-toggle="dropdown"><i class="fa fa-cog"></i> 更多</a>
+                    <ul class="dropdown-menu text-left" role="menu">
+                        <li><a class="btn btn-link btn-multi btn-disabled disabled" href="javascript:;" data-params="status=1"><i class="fa fa-eye"></i> 设为正常</a></li>
+                        <li><a class="btn btn-link btn-multi btn-disabled disabled" href="javascript:;" data-params="status=0"><i class="fa fa-eye-slash"></i> 设为隐藏</a></li>
+                    </ul>
+                </div>
+                </div>
+
+                <table id="table" class="table table-striped table-bordered table-hover"
+                       data-operate-edit="{:$auth->check('comment/edit')}"
+                       data-operate-del="{:$auth->check('comment/del')}"
+                       width="100%">
+                </table>
+            </section>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        // 初始化表格参数配置
+        Table.api.init({
+            extend: {
+                index_url: '{:url("index")}',
+                add_url: '{:url("add")}',
+                edit_url: '{:url("edit")}',
+                del_url: '{:url("del")}',
+                multi_url: '{:url("multi")}',
+                table: 'user',
+            }
+        });
+
+        var table = $("#table");
+        var tableOptions = {
+            url: $.fn.bootstrapTable.defaults.extend.index_url,
+            escape: false,
+            pk: 'id',
+            sortName: 'id',
+            pagination: false,
+            commonSearch: false,
+            columns: [
+                [
+                    {checkbox: true},
+                    {field: 'id', title: 'ID', width: '60'},
+                    {field: 'user.name', title: '会员名', align: 'left', width: '150'},
+                    {field: 'body', title: '评论内容'},
+                    {field: 'status', title: '状态', operate: false, formatter: Table.api.formatter.status, width: '150'},
+                    {field: 'createtime', title: '创建时间', width: '150', formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                    {field: 'operate', width: '150', title: '操作', table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                ]
+            ]
+        };
+        // 初始化表格
+        table.bootstrapTable(tableOptions);
+
+        // 为表格绑定事件
+        Table.api.bindevent(table);
+
+    });
+</script>

@@ -1,0 +1,80 @@
+<section class="content">
+    <div class="panel panel-default panel-intro">
+        <div class="panel-header">
+            <div class="panel-lead">
+                {:build_heading()}
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <section class="content">
+                <div id="toolbar" class="toolbar">
+                    {:build_toolbar('refresh,edit,del')}
+                    <div class="dropdown btn-group {:$auth->check('user/user/multi')?'':'hide'}">
+                        <a class="btn btn-primary btn-sm btn-more dropdown-toggle btn-disabled disabled" data-toggle="dropdown"><i class="fa fa-cog"></i> 更多</a>
+                        <ul class="dropdown-menu text-left" role="menu">
+                            <li><a class="btn btn-link btn-multi btn-disabled disabled" href="javascript:;" data-params="status=1"><i class="fa fa-eye"></i> 设为正常</a></li>
+                            <li><a class="btn btn-link btn-multi btn-disabled disabled" href="javascript:;" data-params="status=0"><i class="fa fa-eye-slash"></i>  设为隐藏</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <table id="table" class="table table-striped table-bordered table-hover"
+                       data-operate-edit="{:$auth->check('user/user/edit')}"
+                       data-operate-del="{:$auth->check('user/user/del')}"
+                       width="100%">
+                </table>
+            </section>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        // 初始化表格参数配置
+        Table.api.init({
+            extend: {
+                index_url: '{:url("index")}',
+                add_url: '{:url("add")}',
+                edit_url: '{:url("edit")}',
+                del_url: '{:url("del")}',
+                multi_url: '{:url("multi")}',
+                table: 'user',
+            }
+        });
+
+        var table = $("#table");
+
+        // 初始化表格
+        table.bootstrapTable({
+            url: $.fn.bootstrapTable.defaults.extend.index_url,
+            pk: 'id',
+            sortName: 'user.id',
+            columns: [
+                [
+                    {checkbox: true},
+                    {field: 'id', title: 'ID', sortable: true},
+                    {field: 'group.name', title: '角色组'},
+                    {field: 'username', title: '用户名', operate: 'LIKE'},
+                    {field: 'nickname', title: '昵称', operate: 'LIKE'},
+                    {field: 'email', title: '电子邮箱', operate: 'LIKE'},
+                    {field: 'mobile', title: '手机号', operate: 'LIKE'},
+                    {field: 'avatar', title: '头像', formatter: Table.api.formatter.image, operate: false},
+                    {field: 'level', title: '等级', operate: 'BETWEEN', sortable: true},
+                    {field: 'gender', title: '性别', visible: false, searchList: {1: '男', 0: '女'}},
+                    {field: 'score', title: '积分', operate: 'BETWEEN', sortable: true},
+                    {field: 'successions', title: '连续登录天数', visible: false, operate: 'BETWEEN', sortable: true},
+                    {field: 'maxsuccessions', title: '最大连续登录天数', visible: false, operate: 'BETWEEN', sortable: true},
+                    {field: 'logintime', title: '登录时间', formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                    {field: 'loginip', title: '登录IP', formatter: Table.api.formatter.search},
+                    {field: 'jointime', title: '加入时间', formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                    {field: 'joinip', title: '加入IP', formatter: Table.api.formatter.search},
+                    {field: 'status', title: '状态', formatter: Table.api.formatter.status, searchList: {1: '正常', 0: '禁用'}},
+                    {field: 'operate', title: '操作', table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                ]
+            ]
+        });
+
+        // 为表格绑定事件
+        Table.api.bindevent(table);
+    });
+</script>

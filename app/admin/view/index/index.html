@@ -1,0 +1,62 @@
+
+<!-- Main content -->
+<section class="content">
+    <!-- Info boxes -->
+    <div class="row">
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">新会员</span>
+                    <span class="info-box-number">{$userCount}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <div class="box-header"><h3 class="box-title">服务器信息</h3></div>
+                <div class="box-body" style="padding-top:0;">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <td>程序版本</td>
+                            <td>lanru v2.0</td>
+                        </tr>
+                        <tr>
+                            <td>Thinkphp version</td>
+                            <td>{$Think.version}</td>
+                        </tr>
+                        <tr>
+                            <td>环境信息</td>
+                            <td>{:Request::server('SERVER_SOFTWARE')}</td>
+                        </tr>
+                        <tr>
+                            <td>网站目录</td>
+                            <td>{:Request::server('DOCUMENT_ROOT')}</td>
+                        </tr>
+                        <tr>
+                            <td>调试模式</td>
+                            <td>{if Config::get('app_debug')}是{else}否{/if}</td>
+                        </tr>
+
+                        <tr>
+                            <td>语言</td>
+                            <td>zh-cn</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

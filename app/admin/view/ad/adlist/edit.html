@@ -1,0 +1,56 @@
+<section class="content">
+    <div class="panel panel-default panel-intro">
+        <div class="panel-body">
+            <section class="content">
+                <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+                    <input type="hidden" name="row[id]" value="{$row.id}">
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-xs-12 col-sm-2">位置:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            {:build_select('row[pid]', $sort, $row['pid'], ['class'=>'form-control selectpicker'])}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-xs-12 col-sm-2">备注:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="text" class="form-control" id="name" name="row[name]" value="{$row.name}" data-rule="required" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="c-remark" class="control-label col-xs-12 col-sm-2">图片:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-inline">
+                                <input id="c-remark" class="form-control" size="50" name="row[remark]" type="text" value="{$row.remark}">
+                                <span><button type="button" id="plupload-remark" class="btn btn-danger plupload" data-input-id="c-remark" data-mimetype="image/*" data-multiple="false" data-preview-id="p-remark"><i class="fa fa-upload"></i> 上传</button></span>
+                                <span class="msg-box n-right" for="c-remark"></span>
+                                <ul class="row list-inline plupload-preview" id="p-remark"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group hidden layer-footer">
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-12 col-sm-8 text-left">
+                            <button type="submit" class="btn btn-success btn-embossed disabled">提交</button>
+                            <button type="reset" class="btn btn-default btn-embossed">重置</button>
+                        </div>
+                    </div>
+
+                </form>
+
+
+
+
+            </section>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        Form.api.bindevent($("form[role=form]"));
+    })
+</script>
